@@ -12,7 +12,14 @@ public class Libro {
     public Libro() {
         this.isbn = "";
         this.titulo = "";
-        this.categoria = "" + "";
+        this.categoria = "";
+    }
+
+    public Libro(String isbn) {
+        this.isbn = isbn;
+        this.titulo = "";
+        this.categoria = "";
+
     }
 
     public Libro(String isbn, String titulo, String categoria) {
@@ -64,10 +71,34 @@ public class Libro {
 
     public  void insertar() {
         String consultaSQL = "insert into Libros (isbn, titulo, categoria) values ('" + isbn + "','"+ titulo +"','" + categoria +"')";
-        DatabaseHelper db = new DatabaseHelper();
+        DatabaseHelper<Libro> db = new DatabaseHelper();
         db.modificarRegistro(consultaSQL);
     }
 
+    public void borrar() {
+        String consultaSQL = "delete from Libros where isbn='" + this.isbn + "'";
+        DatabaseHelper<Libro> db = new DatabaseHelper<>();
+        db.modificarRegistro(consultaSQL);
+    }
 
+    public static Libro buscarPorClave(String isbn) {
+        String consulaSQL = "select isbn, titulo, categoria from Libros where isbn='" + isbn + "'";
+        DatabaseHelper<Libro> db = new DatabaseHelper<>();
+        List<Libro> listaLibros = db.seleccionarRegistros(consulaSQL,Libro.class);
+        return listaLibros.get(0);
+
+    }
+
+    public static List<Libro> buscarPorCategoria(String categoria) {
+        String consultaSQL = "select isbn, nombre, categoria from Libros where categoria='" + categoria + "'";
+        DatabaseHelper<Libro> db = new DatabaseHelper<>();
+        return db.seleccionarRegistros(consultaSQL,Libro.class);
+    }
+
+    public void salvar() {
+        String consultaSQL = "update Libros set titulo='"+ this.titulo + "', categoria='" + this.categoria + "' where isbn='" + this.isbn + "'";
+        DatabaseHelper<Libro> db = new DatabaseHelper<>();
+        db.modificarRegistro(consultaSQL);
+    }
 
 }

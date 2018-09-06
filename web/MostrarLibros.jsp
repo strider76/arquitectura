@@ -22,13 +22,21 @@
 %>
     </select><br/>
 <%
-    List<Libro> listaLibros = Libro.buscarTodos();
+    List<Libro> listaLibros = null;
+
+    if (request.getParameter("categoria") == null || request.getParameter("categoria").equals("seleccionar")){
+        listaLibros = Libro.buscarTodos();
+    } else {
+        listaLibros = Libro.buscarPorCategoria(request.getParameter("categoria"));
+    }
 
     for (Libro libro : listaLibros) {
 %>
             <%=libro.getIsbn()%>
             <%=libro.getTitulo()%>
-            <%=libro.getCategoria()%><br/>
+            <%=libro.getCategoria()%>
+            <a href="BorrarLibro.jsp?isbn=<%=libro.getIsbn()%>">Borrar</a>
+            <a href="FormularioEditarLibro.jsp?isbn=<%=libro.getIsbn()%>">Editar</a> <br/>
 <%  }
 
 %>
